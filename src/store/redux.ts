@@ -12,6 +12,7 @@ const rootReducer = combineReducers({
   favoriteContacts: favoriteContactReducer,
 });
 
+// я не понимаю как это решить, можно уменьшить версию редакс и ошибка уходит, но появляется ошибки с другими зависимостями редакса
 // @ts-ignore
 export const store = createStore(rootReducer, composeWithDevToolsDevelopmentOnly(applyMiddleware(logActionMiddleware)));
 
