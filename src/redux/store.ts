@@ -1,10 +1,9 @@
+import { configureStore, ThunkDispatch } from "@reduxjs/toolkit";
 import { TypedUseSelectorHook, useDispatch, useSelector, useStore } from "react-redux";
-import { applyMiddleware, combineReducers, createStore } from "redux";
+import { Action, combineReducers } from "redux";
 import { contactReducer } from "./contactReducer";
-import { groupContactReducer } from "./groupContactReducer";
 import { favoriteContactReducer } from "./favoriteContactReducer";
-import { composeWithDevToolsDevelopmentOnly } from "@redux-devtools/extension";
-import { logActionMiddleware } from "./logActionMiddleware";
+import { groupContactReducer } from "./groupContactReducer";
 
 const rootReducer = combineReducers({
   contacts: contactReducer,
@@ -12,12 +11,16 @@ const rootReducer = combineReducers({
   favoriteContacts: favoriteContactReducer,
 });
 
-// я не понимаю как это решить, можно уменьшить версию редакс и ошибка уходит, но появляется ошибки с другими зависимостями редакса
-// @ts-ignore
-export const store = createStore(rootReducer, composeWithDevToolsDevelopmentOnly(applyMiddleware(logActionMiddleware)));
+export const store = configureStore({
+  reducer: rootReducer,
+  middleware(getDefaultMiddleware) {
+    return getDefaultMiddleware().concat([]);
+  },
+});
 
 export type RootState = ReturnType<typeof rootReducer>;
 
-export const useAppDispatch = useDispatch<any>;
+// Hooks for Redux
+export const useAppDispatch = useDispatch<ThunkDispatch<RootState, void, Action>>;
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 export const useAppStore = useStore<RootState>;
