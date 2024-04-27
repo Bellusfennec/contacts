@@ -8,8 +8,8 @@ import {
   setContactActionCreator,
   setFavoriteContactActionCreator,
   setGroupContactActionCreator,
-} from "src/store/actions";
-import { useAppDispatch } from "src/store/redux";
+} from "src/redux/actions";
+import { useAppDispatch } from "src/redux/store";
 import "./MainApp.scss";
 
 export const MainApp = () => {

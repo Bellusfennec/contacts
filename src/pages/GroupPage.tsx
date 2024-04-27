@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import { ContactCard } from "src/components/ContactCard";
 import { Empty } from "src/components/Empty";
 import { GroupContactsCard } from "src/components/GroupContactsCard";
-import { useAppSelector } from "src/store/redux";
+import { useAppSelector } from "src/redux/store";
 import { ContactDto } from "src/types/dto/ContactDto";
 import { GroupContactsDto } from "src/types/dto/GroupContactsDto";
 
@@ -24,6 +24,7 @@ export const GroupPage = memo(() => {
       }
       return [];
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [groupId]);
 
   return (

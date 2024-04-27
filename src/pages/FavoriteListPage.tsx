@@ -1,7 +1,7 @@
 import { memo } from "react";
 import { Col, Row } from "react-bootstrap";
 import { ContactCard } from "src/components/ContactCard";
-import { useAppSelector } from "src/store/redux";
+import { useAppSelector } from "src/redux/store";
 
 export const FavoriteListPage = memo(() => {
   const contacts = useAppSelector((state) => state.contacts.entity);
