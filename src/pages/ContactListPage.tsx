@@ -3,25 +3,20 @@ import { Col, Row } from "react-bootstrap";
 import { ContactCard } from "src/components/ContactCard";
 import { FilterForm, FilterFormValues } from "src/components/FilterForm";
 import { useGetContactsQuery } from "src/redux/contact";
-import { useAppSelector } from "src/redux/store";
+import { useGetGroupContactsQuery } from "src/redux/groupContact";
 import { ContactDto } from "src/types/dto/ContactDto";
 
 export const ContactListPage = memo(() => {
-  const { data } = useGetContactsQuery();
-  console.log("data", data);
-
-  const contactsState = useAppSelector((state) => state.contacts.entity);
-  console.log("contactsState", contactsState);
-
-  const groupContactsState = useAppSelector((state) => state.groupContacts.entity);
-  const [contacts, setContacts] = useState<ContactDto[]>(contactsState);
+  const { data: contactsState } = useGetContactsQuery();
+  const { data: groupContactsState } = useGetGroupContactsQuery();
+  const [contacts, setContacts] = useState<ContactDto[]>([]);
 
   useEffect(() => {
-    setContacts(contactsState);
+    if (contactsState) setContacts(contactsState);
   }, [contactsState]);
 
   const onSubmit = (fv: Partial<FilterFormValues>) => {
-    let findContacts: ContactDto[] = contactsState;
+    let findContacts: ContactDto[] = contactsState || [];
 
     if (fv.name) {
       const fvName = fv.name.toLowerCase();
@@ -29,20 +24,21 @@ export const ContactListPage = memo(() => {
     }
 
     if (fv.groupId) {
-      const groupContacts = groupContactsState.find(({ id }) => id === fv.groupId);
+      const groupContacts = groupContactsState?.find(({ id }) => id === fv.groupId);
 
       if (groupContacts) {
         findContacts = findContacts.filter(({ id }) => groupContacts.contactIds.includes(id));
       }
     }
-
     setContacts(findContacts);
   };
 
   return (
     <Row xxl={1}>
       <Col className="mb-3">
-        <FilterForm groupContactsList={groupContactsState} initialValues={{}} onSubmit={onSubmit} />
+        {groupContactsState && (
+          <FilterForm groupContactsList={groupContactsState} initialValues={{}} onSubmit={onSubmit} />
+        )}
       </Col>
       <Col>
         <Row xxl={4} className="g-4">
