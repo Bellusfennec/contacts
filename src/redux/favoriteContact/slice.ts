@@ -7,6 +7,6 @@ export const favoriteContactSlice = createSlice({
   name: "favoriteContact",
   initialState,
   reducers: {
-    setFavoriteContact: (state, action: PayloadAction<any>) => [...state, action.payload],
+    setFavoriteContact: (state, action: PayloadAction<any>) => [...state, ...action.payload],
   },
 });

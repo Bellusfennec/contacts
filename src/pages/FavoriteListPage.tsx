@@ -7,11 +7,7 @@ import { useAppSelector } from "src/redux/store";
 export const FavoriteListPage = memo(() => {
   const { data: contacts } = useGetContactsQuery();
   const favoriteContacts = useAppSelector((state) => state.favoriteContact);
-  const list = contacts?.filter(({ id }) => {
-    return favoriteContacts.includes(id);
-  });
-
-  console.log(contacts, favoriteContacts, list);
+  const list = contacts?.filter(({ id }) => favoriteContacts.includes(id));
 
   return (
     <Row xxl={4} className="g-4">
