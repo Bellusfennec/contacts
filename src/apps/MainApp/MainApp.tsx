@@ -1,27 +1,25 @@
 import { useEffect } from "react";
 import { ThemeProvider } from "react-bootstrap";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { DATA_CONTACT, DATA_GROUP_CONTACT } from "src/__data__";
 import { Layout } from "src/components/Layout";
 import { ContactListPage, ContactPage, FavoriteListPage, GroupListPage, GroupPage } from "src/pages";
-import {
-  setContactActionCreator,
-  setFavoriteContactActionCreator,
-  setGroupContactActionCreator,
-} from "src/store/actions";
-import { useAppDispatch } from "src/store/redux";
+import { useGetContactsQuery } from "src/redux/contact";
+import { setFavoriteContact } from "src/redux/favoriteContact";
+import { useAppDispatch } from "src/redux/store";
 import "./MainApp.scss";
 
 export const MainApp = () => {
   const dispatch = useAppDispatch();
-  const DATA_FAVORITE_CONTACT = [DATA_CONTACT[0].id, DATA_CONTACT[1].id, DATA_CONTACT[2].id, DATA_CONTACT[3].id];
+  const { data: contacts } = useGetContactsQuery();
 
   useEffect(() => {
-    dispatch(setGroupContactActionCreator(DATA_GROUP_CONTACT));
-    dispatch(setContactActionCreator(DATA_CONTACT));
-    dispatch(setFavoriteContactActionCreator(DATA_FAVORITE_CONTACT));
+    if (contacts && contacts?.length > 4) {
+      const DATA_CONTACT = contacts;
+      const DATA_FAVORITE_CONTACT = [DATA_CONTACT[0].id, DATA_CONTACT[1].id, DATA_CONTACT[2].id, DATA_CONTACT[3].id];
+      dispatch(setFavoriteContact(DATA_FAVORITE_CONTACT));
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [contacts]);
 
   return (
     <ThemeProvider breakpoints={["xxxl", "xxl", "xl", "lg", "md", "sm", "xs", "xxs"]} minBreakpoint="xxs">

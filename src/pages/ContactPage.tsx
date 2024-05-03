@@ -3,12 +3,12 @@ import { Col, Row } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import { ContactCard } from "src/components/ContactCard";
 import { Empty } from "src/components/Empty";
-import { useAppSelector } from "src/store/redux";
+import { useGetContactsQuery } from "src/redux/contact";
 
 export const ContactPage: FC = () => {
   const { contactId } = useParams<{ contactId: string }>();
-  const contactsState = useAppSelector((state) => state.contacts.entity);
-  const contact = contactsState.find(({ id }) => id === contactId);
+  const { data: contactsState } = useGetContactsQuery();
+  const contact = contactsState?.find(({ id }) => id === contactId);
 
   return (
     <Row xxl={3}>

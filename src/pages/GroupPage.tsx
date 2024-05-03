@@ -4,26 +4,28 @@ import { useParams } from "react-router-dom";
 import { ContactCard } from "src/components/ContactCard";
 import { Empty } from "src/components/Empty";
 import { GroupContactsCard } from "src/components/GroupContactsCard";
-import { useAppSelector } from "src/store/redux";
+import { useGetContactsQuery } from "src/redux/contact";
+import { useGetGroupContactsQuery } from "src/redux/groupContact";
 import { ContactDto } from "src/types/dto/ContactDto";
 import { GroupContactsDto } from "src/types/dto/GroupContactsDto";
 
 export const GroupPage = memo(() => {
-  const contactsState = useAppSelector((state) => state.contacts.entity);
-  const groupContactsState = useAppSelector((state) => state.groupContacts.entity);
+  const { data: contactsState } = useGetContactsQuery();
+  const { data: groupContactsState } = useGetGroupContactsQuery();
   const { groupId } = useParams<{ groupId: string }>();
   const [contacts, setContacts] = useState<ContactDto[]>([]);
   const [groupContacts, setGroupContacts] = useState<GroupContactsDto>();
 
   useEffect(() => {
-    const findGroup = groupContactsState.find(({ id }) => id === groupId);
+    const findGroup = groupContactsState?.find(({ id }) => id === groupId);
     setGroupContacts(findGroup);
     setContacts(() => {
       if (findGroup) {
-        return contactsState.filter(({ id }) => findGroup.contactIds.includes(id));
+        return contactsState?.filter(({ id }) => findGroup.contactIds.includes(id)) || [];
       }
       return [];
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [groupId]);
 
   return (
