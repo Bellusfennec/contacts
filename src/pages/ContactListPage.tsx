@@ -1,14 +1,15 @@
-import { memo, useEffect, useState } from "react";
+import { observer } from "mobx-react-lite";
+import { useEffect, useState } from "react";
 import { Col, Row } from "react-bootstrap";
 import { ContactCard } from "src/components/ContactCard";
 import { FilterForm, FilterFormValues } from "src/components/FilterForm";
-import { useGetContactsQuery } from "src/redux/contact";
-import { useGetGroupContactsQuery } from "src/redux/groupContact";
+import { contactStore } from "src/mobx/contact";
+import { groupContactStore } from "src/mobx/groupContact";
 import { ContactDto } from "src/types/dto/ContactDto";
 
-export const ContactListPage = memo(() => {
-  const { data: contactsState } = useGetContactsQuery();
-  const { data: groupContactsState } = useGetGroupContactsQuery();
+export const ContactListPage = observer(() => {
+  const contactsState = contactStore.contact;
+  const groupContactsState = groupContactStore.groupContact;
   const [contacts, setContacts] = useState<ContactDto[]>([]);
 
   useEffect(() => {

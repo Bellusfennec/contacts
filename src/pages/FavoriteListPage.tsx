@@ -1,12 +1,12 @@
-import { memo } from "react";
+import { observer } from "mobx-react-lite";
 import { Col, Row } from "react-bootstrap";
 import { ContactCard } from "src/components/ContactCard";
-import { useGetContactsQuery } from "src/redux/contact";
-import { useAppSelector } from "src/redux/store";
+import { contactStore } from "src/mobx/contact";
+import { favoriteContactStore } from "src/mobx/favoriteContact";
 
-export const FavoriteListPage = memo(() => {
-  const { data: contacts } = useGetContactsQuery();
-  const favoriteContacts = useAppSelector((state) => state.favoriteContact);
+export const FavoriteListPage = observer(() => {
+  const contacts = contactStore.contact;
+  const favoriteContacts = favoriteContactStore.favoriteContact;
   const list = contacts?.filter(({ id }) => favoriteContacts.includes(id));
 
   return (

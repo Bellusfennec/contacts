@@ -1,13 +1,14 @@
+import { observer } from "mobx-react-lite";
 import { FC } from "react";
 import { Col, Row } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import { ContactCard } from "src/components/ContactCard";
 import { Empty } from "src/components/Empty";
-import { useGetContactsQuery } from "src/redux/contact";
+import { contactStore } from "src/mobx/contact";
 
-export const ContactPage: FC = () => {
+export const ContactPage: FC = observer(() => {
   const { contactId } = useParams<{ contactId: string }>();
-  const { data: contactsState } = useGetContactsQuery();
+  const contactsState = contactStore.contact;
   const contact = contactsState?.find(({ id }) => id === contactId);
 
   return (
@@ -15,4 +16,4 @@ export const ContactPage: FC = () => {
       <Col className={"mx-auto"}>{contact ? <ContactCard contact={contact} /> : <Empty />}</Col>
     </Row>
   );
-};
+});
